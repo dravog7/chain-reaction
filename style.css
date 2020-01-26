@@ -1,11 +1,14 @@
 table {
     margin: auto;
 }
-
+:root {
+    --width: 1vh;
+    --height: 1vh;
+}
 td {
     border: solid black;
-    height: 64px;
-    width: 64px;
+    height: var(--height);
+    width: var(--width);
 }
 
 td:hover {

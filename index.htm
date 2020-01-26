@@ -31,6 +31,8 @@
                 table.appendChild(tr);
             }
             document.body.appendChild(table);
+            document.body.style.setProperty('--width',70/n+'vw');
+            document.body.style.setProperty('--height',60/n+'vh');
         }
         document.getElementById('reset').addEventListener('click',startGame);
         window.addEventListener('load',()=>{
