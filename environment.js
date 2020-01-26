@@ -20,8 +20,7 @@ class environment {
     run() {
         this.player=0;
         this.setPlayer();
-        
-        this.interval=setInterval(this.mover.bind(this),500);   
+        this.interval=setInterval(this.mover.bind(this),300);   
     }
     mover() {
         if((env.running==1)||(env.winner!=-1)||env.player==-1)
@@ -29,7 +28,9 @@ class environment {
         else if(env.isBot())
         {
             let obj=this.ps[this.player].makeMove(this.state,this.player);
+            let pl=this.player; //player changes after makeMove
             this.makeMove(obj.row,obj.column);
+            this.ps[pl].checkWin(this.state,this.winner);
         }
     }
     isBot() {
@@ -51,7 +52,11 @@ class environment {
         let el=document.getElementById('winner');
         el.innerText=this.winner;
         if(this.player>-1)
+        {
+            wins[this.player]+=1;
             el.style.setProperty('color',this.ps[this.winner].color);
+        }
+            
         else
             el.style.removeProperty('color');
     }

@@ -19,3 +19,7 @@ td:hover {
     margin: auto;
     width: fit-content;
 }
+
+.cell {
+    font-size:100px;
+}

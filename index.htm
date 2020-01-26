@@ -11,7 +11,10 @@
     <div id='header'>
         <h1>Player:<b id='pl'>-1</b>,winner:<b id='winner'>-1</b></h1>
         <button id='reset'>RESET!</button>
+        <button id='switch'>switch to player</button>
+        <button id='save'>save</button>
     </div>
+    <script src='tf.min.js'></script>
     <script src='environment.js'></script>
     <script src='player.js'></script>
     <script src='bot.js'></script>
@@ -35,11 +38,14 @@
             document.body.style.setProperty('--height',60/n+'vh');
         }
         document.getElementById('reset').addEventListener('click',startGame);
+        document.getElementById('switch').addEventListener('click',addPl);
         window.addEventListener('load',()=>{
             let side=Number(prompt("enter dimension!",2));
             createTable(side);
             window.sideLength=side;
-            startGame();
+        });
+        document.getElementById('save').addEventListener('click',()=>{
+            env.ps.forEach((a)=>{a.save();});
         });
         function add(e) {
             if((env.running==1)||(env.winner!=-1)||env.player==-1||env.isBot())
@@ -57,9 +63,13 @@
         }
         function startGame() {
             if(!window.env) {
-                let players=[new player('#ff0000'),new bot('#0000ff')];
+                let players=[new bot('#ff0000',0),new bot('#0000ff',1)];
+                window.wins=[0,0];
                 window.env=new environment(players,window.sideLength);
                 window.env.setTable();
+                if(confirm('load models?')) {
+                    players.forEach((a)=>{a.load();});
+                }
                 window.env.run();
             }
             else {
@@ -67,7 +77,15 @@
                 window.env.setTable();
                 window.env.run();
             }
-            
+            inter=setInterval(()=>{
+            if(env.winner!=-1) {
+                startGame();
+            }
+            },1000);
+        }
+        function addPl() {
+            console.log('a');
+            clearInterval(inter);
         }
     </script>
 </body>

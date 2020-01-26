@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test</title>
+    <script src="tf.min.js"></script>
+</head>
+<body>
+    <script>
+        function makeInput() {
+            let a=[];
+            for(let i=0;i<4;i++) {
+                let b=[];
+                for(let j=0;j<4;j++) {
+                    let c=[];
+                    for(let k=0;k<4;k++) {
+                        c.push(0);
+                    }
+                    b.push(c);
+                }
+                a.push(b);
+            }
+            return tf.tensor4d([a],[1,4,4,4]);
+        }
+        let model=tf.sequential();
+        model.add(tf.layers.reshape({targetShape:[4*4*4],inputShape:[4,4,4]}));
+        model.add(tf.layers.dense({units:4*4,activation:'sigmoid'}));
+        model.add(tf.layers.reshape({targetShape:[4,4]}));
+        model.compile({optimizer: 'sgd', loss: 'meanSquaredError'});
+        console.log(model.outputShape);
+        console.log(model.predict(makeInput()).arraySync());
+
+    </script>
+</body>
+</html>
