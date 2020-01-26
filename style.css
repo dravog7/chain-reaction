@@ -1,0 +1,18 @@
+table {
+    margin: auto;
+}
+
+td {
+    border: solid black;
+    height: 64px;
+    width: 64px;
+}
+
+td:hover {
+    background: #aaaaaa;
+}
+
+#header {
+    margin: auto;
+    width: fit-content;
+}
