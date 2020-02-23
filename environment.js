@@ -7,6 +7,7 @@ class environment {
         this.winner=-1;
         this.setPlayer();this.setWinner();
         this.interval="";
+        this.animations=[];
     }
     reset() {
         clearInterval(this.interval);
@@ -86,6 +87,8 @@ class environment {
                 for (let j=0;j<this.state[0].length;j++) {
                     let index=i*this.state.length+j;
                     let element=tds[index];
+                    element.setAttribute('value',this.state[i][j].number);
+                    element.setAttribute('owner',this.state[i][j].owner);
                     element.innerHTML=this.getElement(this.state[i][j]);
                 }
             }
@@ -96,7 +99,8 @@ class environment {
             return "";
         let color=this.ps[el.owner].color;
         let number=el.number;
-        return '<div class="cell" style="color:'+color+'">'+number+'</div>';
+        //return '<div class="cell" style="color:'+color+'">'+number+'</div>';
+        return '';
     }
     async makeMove(row,column) {
         this.running=1;
@@ -105,7 +109,9 @@ class environment {
         this.state[row][column].owner=this.player;
         this.player=(this.player+1)%this.ps.length;
         this.setTable();
+        this.toggleClick(row,column);
         await this.floodFill(row,column);
+        this.toggleClick(row,column);
         this.setPlayer();
         }
         this.running=0;
@@ -113,11 +119,25 @@ class environment {
     getCell(row,column) {
         return this.state[row][column];
     }
+    toggleClick(row,column) {
+        let el=document.getElementsByClassName('clicked')[0];
+        if(!el) {
+        let tds=document.getElementsByTagName('td');
+        let index=row*this.state.length+column;
+        let el=tds[index];
+        el.classList.add('clicked');
+        }
+        else {
+            el.classList.remove('clicked');
+        }
+
+    }
     async floodFill(row,column) {
         //start checking from row,column for threshold
         //corners<2
         //edges<3
         //others<4
+        this.animation=[];
         let q=[{row,column,parent:""}];
         while(q.length>0) {
             let curr=q.splice(0,1)[0];
@@ -129,11 +149,12 @@ class environment {
                     this.state[sides[i].row][sides[i].column].number+=1;
                     this.state[sides[i].row][sides[i].column].owner=obj.owner;
                     obj.number-=1;
+                    this.animation.push({from:[curr.row,curr.column],to:[sides[i].row,sides[i].column]})
                 }
             if(obj.number<=0)
                 obj.owner=-1;
             q=q.concat(sides);
-            await new Promise((res)=>{setTimeout(()=>{res();},500)});
+            await new Promise((res)=>{setTimeout(()=>{res();},200)}); //replace with animation flag checker
             this.winner=this.checkWinner();
             if(this.winner!=-1) {
                 this.setWinner();
@@ -143,6 +164,7 @@ class environment {
             }
             this.setTable();
         }
+        await new Promise((res)=>{setTimeout(()=>{res();},500)});
     }
     getSides(curr) {
         let row=curr.row,column=curr.column;

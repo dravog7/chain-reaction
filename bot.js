@@ -68,7 +68,6 @@ class bot {
         let peQ=this.Q(this.prevstate).arraySync()[0];//q(s,)
         let prevQ=peQ[this.prevrow][this.prevcolumn];
         let newQ=(1-this.alpha)*prevQ+this.alpha*(R+this.discount*currQ); //Q-learning equation
-        console.log(prevQ+','+newQ);
         let inp=this.normalize(this.prevstate);
         peQ[this.prevrow][this.prevcolumn]=newQ;
         this.filter(peQ,this.prevstate); //remove invalid actions

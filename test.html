@@ -1,37 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>test</title>
-    <script src="tf.min.js"></script>
+  <meta charset="utf-8">
+  <title>Hello World</title>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
 <body>
-    <script>
-        function makeInput() {
-            let a=[];
-            for(let i=0;i<4;i++) {
-                let b=[];
-                for(let j=0;j<4;j++) {
-                    let c=[];
-                    for(let k=0;k<4;k++) {
-                        c.push(0);
-                    }
-                    b.push(c);
-                }
-                a.push(b);
-            }
-            return tf.tensor4d([a],[1,4,4,4]);
-        }
-        let model=tf.sequential();
-        model.add(tf.layers.reshape({targetShape:[4*4*4],inputShape:[4,4,4]}));
-        model.add(tf.layers.dense({units:4*4,activation:'sigmoid'}));
-        model.add(tf.layers.reshape({targetShape:[4,4]}));
-        model.compile({optimizer: 'sgd', loss: 'meanSquaredError'});
-        console.log(model.outputShape);
-        console.log(model.predict(makeInput()).arraySync());
-
-    </script>
+  <script>
+  var draw = SVG().addTo('body').size(300, 300);
+  var g=draw.group();
+  c1=g.circle(100);
+  c2=g.circle(100);
+  c3=g.circle(100);
+  c4=g.circle(100);
+  c5=g.circle(100);
+  g1=draw.gradient("radial",(add)=>{
+    add.stop(0,"#aa0000");add.stop(1,"#ff0000");
+  })
+  c1.fill(g1);c2.fill(g1);c3.fill(g1);c4.fill(g1);c5.fill(g1);
+  c1.cx(100);
+  c2.cy(100);
+  c3.cx(100).cy(150);
+  c4.cx(150).cy(100);
+  c5.cx(100).cy(100);
+  </script>
 </body>
 </html>
